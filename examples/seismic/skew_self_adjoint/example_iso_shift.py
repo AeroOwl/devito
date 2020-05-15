@@ -47,27 +47,27 @@ src_term = src.inject(field=p0.forward, expr=src * t.spacing**2 * vel0**2 / b)
 
 
 def g1(field):
-    return field.dx(x0=x+x.spacing/2)
+    return field.dx(x0=x+x.spacing)
 
 
 def g2(field):
-    return field.dy(x0=y+y.spacing/2)
+    return field.dy(x0=y+y.spacing)
 
 
 def g3(field):
-    return field.dz(x0=z+z.spacing/2)
+    return field.dz(x0=z+z.spacing)
 
 
 def g1_tilde(field):
-    return field.dx(x0=x-x.spacing/2)
+    return field.dx(x0=x-x.spacing)
 
 
 def g2_tilde(field):
-    return field.dy(x0=y-y.spacing/2)
+    return field.dy(x0=y-y.spacing)
 
 
 def g3_tilde(field):
-    return field.dz(x0=z-z.spacing/2)
+    return field.dz(x0=z-z.spacing)
 
 
 # works for smaller sizes, seg faults at (1001,1001,501)
