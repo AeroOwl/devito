@@ -126,8 +126,6 @@ def callback(n):
 
 
 op = Operator([stencil_p_nl, stencil_m_nl, src_term], 
-              subs=spacing_map, name='OpExampleVti', 
+              subs=spacing_map, name='OpExampleVti3', 
               opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
-# op = Operator([eq_b1mf, eq_b1m2e, eq_bfes1me2, stencil_p_nl, stencil_m_nl, src_term],
-#               subs=spacing_map, name='OpExampleVtiFact3')
 op()

@@ -10,6 +10,7 @@ npad = 20
 qmin = 0.1
 qmax = 1000.0
 tmax = 250.0
+tmax = 3.0
 fpeak = 0.010
 omega = 2.0 * np.pi * fpeak
 
@@ -85,5 +86,18 @@ dt = time_axis.step
 spacing_map = vel0.grid.spacing_map
 spacing_map.update({t.spacing: dt})
 
-op = Operator([stencil_p_nl, src_term], subs=spacing_map, name='OpExampleIso')
+
+def callback(n):
+    # TODO: note that is currently naive. But it does the trick nicely
+    # 50/20 are "min op counts to trigger a lifting"
+    if n == 1:
+        return 20
+    elif n == 0:
+        return 10
+    assert False
+
+
+op = Operator([stencil_p_nl, stencil_m_nl, src_term], 
+              subs=spacing_map, name='OpExampleIso', 
+              opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
 op()
