@@ -128,4 +128,9 @@ def callback(n):
 op = Operator([stencil_p_nl, stencil_m_nl, src_term], 
               subs=spacing_map, name='OpExampleVti4', 
               opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
+
+f = open("operator.vti_fact4.c", "w")
+print(op, file=f)
+f.close()
+
 op()

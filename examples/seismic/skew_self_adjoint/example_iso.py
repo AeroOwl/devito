@@ -91,13 +91,20 @@ def callback(n):
     # TODO: note that is currently naive. But it does the trick nicely
     # 50/20 are "min op counts to trigger a lifting"
     if n == 1:
-        return 20
+        return 50
     elif n == 0:
-        return 10
+        return 20
     assert False
 
 
-op = Operator([stencil_p_nl, stencil_m_nl, src_term], 
-              subs=spacing_map, name='OpExampleIso', 
-              opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
+op = Operator([stencil_p_nl, src_term], 
+              subs=spacing_map, name='OpExampleIso')
+# op = Operator([stencil_p_nl, src_term], 
+#               subs=spacing_map, name='OpExampleIso', 
+#               opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
+
+f = open("operator.iso.c", "w")
+print(op, file=f)
+f.close()
+
 op()
