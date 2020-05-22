@@ -203,6 +203,50 @@ class TestCodeGen(object):
         op4 = switchconfig(language='openmp')(Operator)(Eq(u, u + 1), language='C')
         assert '#pragma omp for' not in str(op4)
 
+    def test_nested_indexing(self):
+        """
+        Tests that nested functions used as indices are indexified.
+        """
+        x = Dimension(name='x')
+        y1 = Dimension(name='y1')
+        y2 = Dimension(name='y2')
+        u1 = Function(name="u1", shape=(4, 4), dimensions=(x, y1), dtype=np.int32)
+        u2 = Function(name="u2", shape=(4, 4), dimensions=(x, y2), dtype=np.int32)
+
+        Eq1 = Eq(u2, u2[x, u1])  # Not indexed
+        Eq2 = Eq(u2, u2[x, u1[x, y1]])  # Explicit indexing
+
+        op1 = Operator([Eq1])
+        op2 = Operator([Eq2])
+
+        assert str(op1.ccode) == str(op2.ccode)
+
+    def test_deep_nested_indexing(self):
+        """
+        Tests that deeply nested (depth > 2) functions used as indices are indexified.
+        """
+        x = Dimension(name='x')
+        y1 = Dimension(name='y1')
+        y2 = Dimension(name='y2')
+        y3 = Dimension(name='y3')
+        y4 = Dimension(name='y4')
+
+        u1 = Function(name="u1", shape=(4, 4), dimensions=(x, y1), dtype=np.int32)
+        u2 = Function(name="u2", shape=(4, 4), dimensions=(x, y2), dtype=np.int32)
+        u3 = Function(name="u3", shape=(4, 4), dimensions=(x, y3), dtype=np.int32)
+        u4 = Function(name="u4", shape=(4, 4), dimensions=(x, y4), dtype=np.int32)
+
+        Eq1 = Eq(u1, u2[x, u3[x, u4]])
+        Eq2 = Eq(u1, u2[x, u3[x, u4[x, y4]]])
+
+        op1 = Operator([Eq1])
+        op2 = Operator([Eq2])
+
+        op1.apply()
+        op2.apply()
+
+        assert str(op1.ccode) == str(op2.ccode)
+
 
 class TestArithmetic(object):
 
