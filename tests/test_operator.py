@@ -207,9 +207,7 @@ class TestCodeGen(object):
         """
         Tests that nested functions used as indices are indexified.
         """
-        x = Dimension(name='x')
-        y1 = Dimension(name='y1')
-        y2 = Dimension(name='y2')
+        x, y1, y2 = dimensions('x y1 y2')
         u1 = Function(name="u1", shape=(4, 4), dimensions=(x, y1), dtype=np.int32)
         u2 = Function(name="u2", shape=(4, 4), dimensions=(x, y2), dtype=np.int32)
 
@@ -225,11 +223,7 @@ class TestCodeGen(object):
         """
         Tests that deeply nested (depth > 2) functions used as indices are indexified.
         """
-        x = Dimension(name='x')
-        y1 = Dimension(name='y1')
-        y2 = Dimension(name='y2')
-        y3 = Dimension(name='y3')
-        y4 = Dimension(name='y4')
+        x, y1, y2, y3, y4 = dimensions('x y1 y2 y3 y4')
 
         u1 = Function(name="u1", shape=(4, 4), dimensions=(x, y1), dtype=np.int32)
         u2 = Function(name="u2", shape=(4, 4), dimensions=(x, y2), dtype=np.int32)
