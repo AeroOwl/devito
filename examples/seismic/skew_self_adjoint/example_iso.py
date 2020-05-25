@@ -86,8 +86,17 @@ dt = time_axis.step
 spacing_map = vel0.grid.spacing_map
 spacing_map.update({t.spacing: dt})
 
+# 2020.05.20
+def callback(n):
+    if n == 1:
+        return 50
+    elif n == 0:
+        return 20
+    assert False
+    
 op = Operator([stencil_p_nl, src_term],
-              subs=spacing_map, name='OpExampleIso')
+              subs=spacing_map, name='OpExampleIso',
+              opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
 
 f = open("operator.iso.c", "w")
 print(op, file=f)

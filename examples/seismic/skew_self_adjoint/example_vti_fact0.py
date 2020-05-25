@@ -119,9 +119,18 @@ dt = time_axis.step
 spacing_map = vel0.grid.spacing_map
 spacing_map.update({t.spacing: dt})
 
+# 2020.05.20
+def callback(n):
+    if n == 1:
+        return 50
+    elif n == 0:
+        return 20
+    assert False
+    
 op = Operator([eq_b1mf,
                stencil_p_nl, stencil_m_nl, src_term],
-              subs=spacing_map, name='OpExampleVti0')
+              subs=spacing_map, name='OpExampleVti0',
+              opt=('advanced', {'cire-repeats-inv': 2, 'cire-mincost-inv': callback}))
 
 f = open("operator.vti_fact0.c", "w")
 print(op, file=f)
